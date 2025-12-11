@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>登録追加</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+<body>
+    <h1>新規登録</h1>
+
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.list') }}">登録一覧</a></li>
+        <li>新規登録</li>
+    </ul>
+    
+    <form action="{{ url_for('registration.add') }}" method="post">
+
+        <!-- ユーザー選択 -->
+        <label>ユーザー（学籍番号）: 
+            <select name="user_id" required>
+                {% for user in users %}
+                    <option value="{{ user.id }}">
+                        {{ user.student_id }}（{{ user.grade }}年・{{ user.gender }}）
+                    </option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+        <!-- アルバイト選択 -->
+        <label>アルバイト:
+            <select name="job_id" required>
+                {% for job in jobs %}
+                    <option value="{{ job.id }}">
+                        {{ job.work_detail }} - {{ job.occupation }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+        <!-- 時給入力 -->
+        <label>時給（円）:
+            <input type="number" name="hourly_wage" min="0" required>
+        </label><br>
+
+        <button type="submit">追加</button>
+    </form>
+</body>
+</html>
