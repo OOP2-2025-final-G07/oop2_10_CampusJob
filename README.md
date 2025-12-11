@@ -30,7 +30,12 @@ peewee==3.17.7
 ```
 
 ## 使い方: usage
-　　
+　> このリポジトリのアプリを動作させるために行う手順を詳細に書いてください。
+
+```bash
+$ python app.py
+# Try accessing "http://localhost:8080" in your browser.
+```　
 　　
 　　
 　　
@@ -38,7 +43,7 @@ peewee==3.17.7
 
 
 
-バイトアプリの仕様  
+## バイトアプリの仕様  
 ・ユーザーuser    
 学籍番号（学科）student_id  
 性別gender  
@@ -53,9 +58,12 @@ peewee==3.17.7
 アルバイト（選択）job_id    
 時給（入力）hourly_wage      
 
-> このリポジトリのアプリを動作させるために行う手順を詳細に書いてください。
 
-```bash
-$ python app.py
-# Try accessing "http://localhost:8080" in your browser.
-```
+
+## 役割  
+リーダー :k24135  丸山優梨    yuuri-mr
+ 
+:k24017  伊藤源太     tanukiponta-creator
+:k24031  海老原巧翔   ebiharaaa0909 
+:K24071 佐々木 知哉    to-sasaki333 
+:K24084   鷲見叶芽    KanameSumi
