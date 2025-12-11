@@ -30,6 +30,28 @@ peewee==3.17.7
 ```
 
 ## 使い方: usage
+　　
+　　
+　　
+　　
+
+
+
+
+バイトアプリの仕様  
+・ユーザーuser    
+学籍番号（学科）student_id  
+性別gender  
+学年grade    
+  
+・アルバイトjob  
+職種occupation    
+仕事内容work_detail  
+
+・登録register  
+ユーザー（選択）user_id    
+アルバイト（選択）job_id    
+時給（入力）hourly_wage      
 
 > このリポジトリのアプリを動作させるために行う手順を詳細に書いてください。
 
