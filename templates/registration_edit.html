@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>登録情報編集</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+<body>
+    <h1>登録情報を編集</h1>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.list') }}">登録一覧</a></li>
+        <li>登録情報の編集</li>
+    </ul>
+
+    <form action="{{ url_for('registration.edit', registration_id=registration.id) }}" method="post">
+
+        <!-- ユーザー選択 student_id 表示 -->
+        <label>ユーザー（学籍番号）:
+            <select name="user_id" required>
+                {% for user in users %}
+                    <option value="{{ user.id }}"
+                        {% if registration.user.id == user.id %}selected{% endif %}>
+                        {{ user.student_id }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+        <!-- 仕事選択 表示 -->
+        <label>アルバイト:
+            <select name="job_id" required>
+                {% for job in jobs %}
+                    <option value="{{ job.id }}"
+                        {% if registration.job.id == job.id %}selected{% endif %}>
+                        {{ job.work_detail }}
+                    </option>
+                {% endfor %}
+            </select>
+        </label><br>
+
+        <!-- 時給入力 -->
+        <label>時給:
+            <input type="number" name="hourly_wage" value="{{ registration.hourly_wage }}" required>
+        </label><br>
+
+        <button type="submit">保存</button>
+    </form>
+</body>
+</html>

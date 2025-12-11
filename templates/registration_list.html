@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>データ一覧</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+<body>
+    <h1>{{ title }}</h1>
+
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('registration.list') }}">登録一覧</a></li>
+    </ul>
+
+    <a href="{{ url_for('registration.add') }}">新規登録追加</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>ユーザー</th>
+                <th>仕事</th>
+                <th>時給</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for registration in items %}
+            <tr>
+                <td>
+                    <a href="{{ url_for('registration.edit', registration_id=registration.id) }}">
+                        編集
+                    </a>
+                </td>
+                <td>{{ registration.user.student_id }}</td>
+                <td>{{ registration.job.work_detail }}</td>
+                <td>{{ registration.hourly_wage }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
