@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>アルバイト内容編集</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+</head>
+
+<body>
+    <h1>アルバイト内容を編集</h1>
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li><a href="{{ url_for('job.list') }}">アルバイト一覧</a></li>
+        <li>アルバイト編集</li>
+    </ul>
+
+    <form action="{{ url_for('job.edit', job_id=job.id) }}" method="post">
+        <label>職種: <input type="text" name="occupation" value="{{ job.occupation }}" required></label><br>
+        <label>仕事内容: <input type="text" name="work_detail" value="{{ job.work_detail }}" required></label><br>
+        <button type="submit">保存</button>
+    </form>
+</body>
+
+</html>
