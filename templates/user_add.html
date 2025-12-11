@@ -1,22 +1,37 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
-    <title>ユーザー追加</title>
+    <title>学生追加</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
 </head>
+
 <body>
-    <h1>新しいユーザーを追加</h1>
+    <h1>新しい学生を追加</h1>
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li><a href="{{ url_for('user.list') }}">ユーザー一覧</a></li>
-        <li>ユーザー登録</li>
+        <li><a href="{{ url_for('user.list') }}">学生一覧</a></li>
+        <li>追加</li>
     </ul>
 
     <form action="{{ url_for('user.add') }}" method="post">
         <label>名前: <input type="text" name="name" required></label><br>
-        <label>年齢: <input type="number" name="age" required></label><br>
+
+        <label>学籍番号: <input type="text" name="student_id" placeholder="例: A1234567" required></label><br>
+
+        <label>性別:
+            <select name="gender">
+                <option value="男性">男性</option>
+                <option value="女性">女性</option>
+                <option value="その他">その他</option>
+            </select>
+        </label><br>
+
+        <label>学年: <input type="number" name="grade" min="1" max="4" required> 年</label><br>
+
         <button type="submit">追加</button>
     </form>
 </body>
+
 </html>
