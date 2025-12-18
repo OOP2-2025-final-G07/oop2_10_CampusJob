@@ -28,9 +28,8 @@
             {% for registration in items %}
             <tr>
                 <td>
-                    <a href="{{ url_for('registration.edit', registration_id=registration.id) }}">
-                        編集
-                    </a>
+                    <a href="{{ url_for('registration.edit', registration_id=registration.id) }}">編集</a> |
+                    <a href="{{ url_for('registration.delete', registration_id=registration.id) }}" onclick="return confirm('本当に削除しますか？');">削除</a>
                 </td>
                 <td>{{ registration.user.student_id }}</td>
                 <td>{{ registration.job.work_detail }}</td>
@@ -38,6 +37,6 @@
             </tr>
             {% endfor %}
         </tbody>
-    </table>
+
 </body>
 </html>

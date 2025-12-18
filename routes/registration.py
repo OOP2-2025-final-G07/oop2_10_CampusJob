@@ -49,3 +49,10 @@ def edit(registration_id):
     users = User.select()
     jobs = Job.select()
     return render_template('registration_edit.html', registration=registration, users=users, jobs=jobs)
+
+@registration_bp.route('/delete/<int:registration_id>', methods=['POST', 'GET'])
+def delete(registration_id):
+    registration = Registration.get_or_none(Registration.id == registration_id)
+    if registration:
+        registration.delete_instance()
+    return redirect(url_for('registration.list'))
