@@ -69,6 +69,7 @@ def wage_graph():
     )
 
 
+
 @app.route("/graph/occupation")
 def occupation_graph():
     regs = Registration.select().join(Job)
@@ -93,7 +94,6 @@ def occupation_graph():
         labels=list(counts.keys()),
         values=list(counts.values())
     )
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
