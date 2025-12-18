@@ -29,18 +29,25 @@ def wage_graph():
     regs = Registration.select()
 
     bins = {
+        "~1,100": 0,
         "~1,150": 0,
         "~1,200": 0,
         "~1,250": 0,
         "~1,300": 0,
         "~1,350": 0,
         "~1,400": 0,
-        "1,400~": 0
+        "~1,450": 0,
+        "~1,500": 0,
+        "~1,550": 0,
+        "~1,600": 0,
+        "1,600~": 0,
     }
 
     for r in regs:
         w = r.hourly_wage
-        if w <= 1150:
+        if w <= 1100:
+            bins["~1,100"] += 1
+        elif w <= 1150:
             bins["~1,150"] += 1
         elif w <= 1200:
             bins["~1,200"] += 1
@@ -52,8 +59,16 @@ def wage_graph():
             bins["~1,350"] += 1
         elif w <= 1400:
             bins["~1,400"] += 1
+        elif w <= 1450:
+            bins["~1,450"] += 1
+        elif w <= 1500:
+            bins["~1,500"] += 1
+        elif w <= 1550:
+            bins["~1,550"] += 1
+        elif w <= 1600:
+            bins["~1,600"] += 1
         else:
-            bins["1,400~"] += 1
+            bins["1,600~"] += 1
 
     return render_template(
         "graphs/hourly_wage.html",
