@@ -16,6 +16,12 @@ for blueprint in blueprints:
 def index():
     return render_template('index.html')
 
+from flask import render_template
+
+@app.route("/graph/<name>")
+def graph(name):
+    return render_template(f"graphs/{name}.html")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
 
