@@ -1,0 +1,11 @@
+<canvas id="chart"></canvas>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+new Chart(document.getElementById('chart'), {
+  type: 'bar',
+  data: {
+    labels: ['1月','2月','3月'],
+    datasets: [{ data: [10,20,15] }]
+  }
+});
+</script>
