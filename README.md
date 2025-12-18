@@ -74,9 +74,9 @@ $ python app.py
 
 
 ## 役割  
-リーダー :k24135  丸山優梨    yuuri-mr
+リーダー :k24135  丸山優梨    yuuri-mr  
  
-:k24017  伊藤源太     tanukiponta-creator
-:k24031  海老原巧翔   ebiharaaa0909 
-:K24071 佐々木 知哉    to-sasaki333 
-:K24084   鷲見叶芽    KanameSumi
+:k24017  伊藤源太     tanukiponta-creator  
+:k24031  海老原巧翔   ebiharaaa0909   
+:K24071 佐々木 知哉    to-sasaki333   
+:K24084   鷲見叶芽    KanameSumi  
