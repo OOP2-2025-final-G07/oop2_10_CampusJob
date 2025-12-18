@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from models import initialize_database
-from models.registration import Registration 
+from models.registration import Registration
+from models import Registration, Job 
 from routes import blueprints
 
 app = Flask(__name__)
@@ -59,6 +60,32 @@ def wage_graph():
         "graphs/hourly_wage.html",
         labels=list(bins.keys()),
         values=list(bins.values())
+    )
+
+
+@app.route("/graph/occupation")
+def occupation_graph():
+    regs = Registration.select().join(Job)
+
+    counts = {
+        "飲食": 0,
+        "事務": 0,
+        "小売": 0,
+        "作業": 0,
+        "教育": 0,
+        "マスコミ": 0,
+        "エンタメ": 0,
+        "在宅": 0,
+        "その他": 0
+    }
+
+    for r in regs:
+        counts[r.job.occupation] += 1
+
+    return render_template(
+        "graphs/chart_occupation.html",
+        labels=list(counts.keys()),
+        values=list(counts.values())
     )
 
 if __name__ == '__main__':
