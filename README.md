@@ -35,11 +35,14 @@
 > 動作に必要な条件を書いてください。
 
 ```bash
-python 3.13 or higher
+python 3.13.7
 
 # python lib
-Flask==3.0.3
-peewee==3.17.7
+Flask==3.1.2
+peewee==3.18.3
+
+# frontend lib (CDN)
+Chart.js
 ```
 
 ## 使い方: usage
