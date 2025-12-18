@@ -9,17 +9,88 @@
 
 <body>
     <h1>アルバイト内容を編集</h1>
+
+    <!-- パンくず -->
     <ul class="breadcrumb">
         <li><a href="{{ url_for('index') }}">HOME</a></li>
         <li><a href="{{ url_for('job.list') }}">アルバイト一覧</a></li>
         <li>アルバイト編集</li>
     </ul>
 
+    <!-- 入力フォーム -->
     <form action="{{ url_for('job.edit', job_id=job.id) }}" method="post">
-        <label>職種: <input type="text" name="occupation" value="{{ job.occupation }}" required></label><br>
+        <label>
+            職種：
+            <select name="occupation" required>
+                <option value="">選択してください</option>
+                <option value="飲食" {% if job.occupation=="飲食" %}selected{% endif %}>飲食</option>
+                <option value="事務" {% if job.occupation=="事務" %}selected{% endif %}>事務</option>
+                <option value="小売" {% if job.occupation=="小売" %}selected{% endif %}>小売</option>
+                <option value="作業" {% if job.occupation=="作業" %}selected{% endif %}>作業</option>
+                <option value="教育" {% if job.occupation=="教育" %}selected{% endif %}>教育</option>
+                <option value="マスコミ" {% if job.occupation=="マスコミ" %}selected{% endif %}>マスコミ</option>
+                <option value="エンタメ" {% if job.occupation=="エンタメ" %}selected{% endif %}>エンタメ</option>
+                <option value="在宅" {% if job.occupation=="在宅" %}selected{% endif %}>在宅</option>
+                <option value="その他" {% if job.occupation=="その他" %}selected{% endif %}>その他</option>
+            </select>
+        </label><br>
+
         <label>仕事内容: <input type="text" name="work_detail" value="{{ job.work_detail }}" required></label><br>
         <button type="submit">保存</button>
     </form>
+
+    <!-- 画面下部：職種一覧 -->
+    <section class="job-explanation">
+        <h2>職種一覧と説明</h2>
+        <p>職種選択や仕事内容入力の参考</p>
+
+        <table class="job-table">
+            <thead>
+                <tr>
+                    <th>職種</th>
+                    <th>主な仕事内容の例</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>飲食</td>
+                    <td>飲食店での接客、配膳、調理補助、洗い物など</td>
+                </tr>
+                <tr>
+                    <td>事務</td>
+                    <td>データ入力、書類整理、電話対応などのオフィス業務</td>
+                </tr>
+                <tr>
+                    <td>小売</td>
+                    <td>店舗での接客販売、レジ業務、商品陳列、在庫管理など</td>
+                </tr>
+                <tr>
+                    <td>作業</td>
+                    <td>倉庫内作業、軽作業、イベント設営、仕分け作業など</td>
+                </tr>
+                <tr>
+                    <td>教育</td>
+                    <td>家庭教師、学習塾の講師、チューターなどの学習支援</td>
+                </tr>
+                <tr>
+                    <td>マスコミ</td>
+                    <td>チラシ配布、イベント補助、取材や制作の補助業務など</td>
+                </tr>
+                <tr>
+                    <td>エンタメ</td>
+                    <td>イベントスタッフ、映画館、テーマパークでの運営補助</td>
+                </tr>
+                <tr>
+                    <td>在宅</td>
+                    <td>データ入力、ライティング、アンケート回答など在宅業務</td>
+                </tr>
+                <tr>
+                    <td>その他</td>
+                    <td>上記に該当しないアルバイト全般</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 </body>
 
 </html>
