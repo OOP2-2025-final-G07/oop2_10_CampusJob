@@ -11,18 +11,31 @@
   const labels = JSON.parse(canvas.dataset.labels);
   const values = JSON.parse(canvas.dataset.values);
 
-  const ctx = canvas.getContext('2d');
+  // ★ 最大値を取得
+  const maxValue = Math.max(...values);
 
-  new Chart(ctx, {
+  // ★ 色配列を作る（最大だけ赤）
+  const colors = values.map(v =>
+    v === maxValue ? '#ef8866' : '#6688fa'
+  );
+
+  new Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
       labels: labels,
       datasets: [{
         label: '人数',
-        data: values
+        data: values,
+        backgroundColor: colors,
+        borderRadius: 6
       }]
     },
     options: {
+      plugins: {
+        legend: {
+          display: false   // ★ 凡例を非表示
+        }
+      },
       responsive: true,
       scales: {
         x: {
@@ -35,6 +48,7 @@
           beginAtZero: true,
           title: {
             display: true,
+            text: '人数'
           },
           ticks: {
             precision: 0
