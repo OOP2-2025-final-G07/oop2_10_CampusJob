@@ -48,7 +48,7 @@ peewee==3.17.7
 ```bash
 $ python app.py
 # Try accessing "http://localhost:8080" in your browser.
-```　
+```
 　　
 　　
 　　
@@ -56,7 +56,7 @@ $ python app.py
 
 
 
-## バイトアプリの仕様  
+## バイトアプリの仕様    
 ・ユーザーuser    
 学籍番号（学科）student_id  
 性別gender  
