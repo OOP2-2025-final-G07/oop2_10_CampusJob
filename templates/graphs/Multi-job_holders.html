@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>掛け持ち学生の分析</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base-style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <h1>掛け持ち学生（2つ以上のバイト）の学年別グラフ</h1>
+
+    <ul class="breadcrumb">
+        <li><a href="{{ url_for('index') }}">HOME</a></li>
+        <li>Multi-job Holders Analysis</li>
+    </ul>
+
+    <div style="width: 100%; max-width: 800px; margin-top: 2rem;">
+        <canvas id="chart"></canvas>
+    </div>
+
+    <script>
+        // 1. データ受け取り
+        const rawData = [
+            {% for reg in registrations %}
+        {
+            userId: "{{ reg.user.id }}",
+                grade: "{{ reg.user.grade }}"
+        },
+        {% endfor %}
+        ];
+
+        // 2. 集計ロジック
+        const userJobCounts = {};
+        const userGrades = {};
+
+        rawData.forEach(item => {
+            const uid = item.userId;
+            if (userJobCounts[uid]) {
+                userJobCounts[uid]++;
+            } else {
+                userJobCounts[uid] = 1;
+                userGrades[uid] = item.grade;
+            }
+        });
+
+        const gradeCounts = {};
+        Object.keys(userJobCounts).forEach(uid => {
+            if (userJobCounts[uid] >= 2) {
+                const g = userGrades[uid] + "年";
+                if (gradeCounts[g]) {
+                    gradeCounts[g]++;
+                } else {
+                    gradeCounts[g] = 1;
+                }
+            }
+        });
+
+        const labels = Object.keys(gradeCounts).sort();
+        const dataValues = labels.map(label => gradeCounts[label]);
+
+        // 3. グラフ描画
+        new Chart(document.getElementById('chart'), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: '掛け持ち人数',
+                    data: dataValues,
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { stepSize: 1 }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>

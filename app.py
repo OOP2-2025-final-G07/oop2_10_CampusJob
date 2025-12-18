@@ -22,7 +22,13 @@ from flask import render_template
 #@app.route("/graph/<name>")
 #def graph(name):
 #    return render_template(f"graphs/{name}.html")
-
+@app.route('/multi-job-holders')
+def multi_job_holders():
+    # Registration モデルを使用してデータを取得
+    registrations = Registration.select()
+    
+    # templates/graphs/ フォルダの中にある HTML を指定
+    return render_template('graphs/Multi-job_holders.html', registrations=registrations)
 # ★ 時給分布グラフ用ルート
 @app.route("/graph/hourly_wage")
 def wage_graph():
@@ -60,6 +66,7 @@ def wage_graph():
         labels=list(bins.keys()),
         values=list(bins.values())
     )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
