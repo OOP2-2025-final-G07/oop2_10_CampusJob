@@ -9,14 +9,7 @@
 </head>
 
 <body>
-    <h1>掛け持ち学生（2つ以上のバイト）の学年別グラフ</h1>
-
-    <ul class="breadcrumb">
-        <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li>Multi-job Holders Analysis</li>
-    </ul>
-
-    <div style="width: 100%; max-width: 800px; margin-top: 2rem;">
+    <div style="width: 100%; max-width: 800px;">
         <canvas id="chart"></canvas>
     </div>
 
@@ -31,54 +24,69 @@
         {% endfor %}
         ];
 
-        // 2. 集計ロジック
+        // 2. 集計ロジック：ユーザーごとのバイト数をカウント
         const userJobCounts = {};
         const userGrades = {};
 
         rawData.forEach(item => {
             const uid = item.userId;
-            if (userJobCounts[uid]) {
-                userJobCounts[uid]++;
-            } else {
-                userJobCounts[uid] = 1;
-                userGrades[uid] = item.grade;
-            }
+            userJobCounts[uid] = (userJobCounts[uid] || 0) + 1;
+            userGrades[uid] = item.grade;
         });
 
-        const gradeCounts = {};
+        // 学年ごとに「専業」と「掛け持ち」を分類
+        const grades = ["1", "2", "3", "4"];
+        const summary = {
+            "1": { single: 0, multi: 0 },
+            "2": { single: 0, multi: 0 },
+            "3": { single: 0, multi: 0 },
+            "4": { single: 0, multi: 0 }
+        };
+
         Object.keys(userJobCounts).forEach(uid => {
-            if (userJobCounts[uid] >= 2) {
-                const g = userGrades[uid] + "年";
-                if (gradeCounts[g]) {
-                    gradeCounts[g]++;
+            const grade = userGrades[uid];
+            if (summary[grade]) {
+                if (userJobCounts[uid] >= 2) {
+                    summary[grade].multi++;
                 } else {
-                    gradeCounts[g] = 1;
+                    summary[grade].single++;
                 }
             }
         });
 
-        const labels = Object.keys(gradeCounts).sort();
-        const dataValues = labels.map(label => gradeCounts[label]);
-
         // 3. グラフ描画
+        const labels = grades.map(g => g + "年");
+
         new Chart(document.getElementById('chart'), {
             type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: '掛け持ち人数',
-                    data: dataValues,
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
+                datasets: [
+                    {
+                        label: '専業 (1つ)',
+                        data: grades.map(g => summary[g].single),
+                        backgroundColor: '#9bb1ff', // 青色（1年生色）
+                        borderWidth: 0,
+                        borderRadius: 4
+                    },
+                    {
+                        label: '掛け持ち (2つ以上)',
+                        data: grades.map(g => summary[g].multi),
+                        backgroundColor: '#f5b1a4', // 赤色（4年生色）
+                        borderWidth: 0,
+                        borderRadius: 4
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 scales: {
+                    x: { stacked: true, title: { display: true, text: '学年' } },
                     y: {
+                        stacked: true,
                         beginAtZero: true,
-                        ticks: { stepSize: 1 }
+                        ticks: { stepSize: 1 },
+                        title: { display: true, text: '人数' }
                     }
                 }
             }
