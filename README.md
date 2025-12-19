@@ -23,12 +23,6 @@
 「どの仕事が人気か？」  
 などを見やすく確認できる  
 
-第10回 講義内資料サンプルコード
-
-ユーザー、製品、注文のデータ登録を行う簡易アプリケーション
-
-データをデータベース(SQLite)に保管するためのサンプルコードを見せつつ外部ライブラリの使用方法について学ばせるためのサンプルです。
-グループワークの際に、このリポジトリを各グループのOrganizationにてforkしてもらい、開発を進めます。
 
 ## アピールポイント
 
@@ -41,11 +35,14 @@
 > 動作に必要な条件を書いてください。
 
 ```bash
-python 3.13 or higher
+python 3.13.7
 
 # python lib
-Flask==3.0.3
-peewee==3.17.7
+Flask==3.1.2
+peewee==3.18.3
+
+# frontend lib (CDN)
+Chart.js
 ```
 
 ## 使い方: usage
@@ -54,7 +51,7 @@ peewee==3.17.7
 ```bash
 $ python app.py
 # Try accessing "http://localhost:8080" in your browser.
-```　
+```
 　　
 　　
 　　
@@ -62,7 +59,7 @@ $ python app.py
 
 
 
-## バイトアプリの仕様  
+## バイトアプリの仕様    
 ・ユーザーuser    
 学籍番号（学科）student_id  
 性別gender  
@@ -80,9 +77,9 @@ $ python app.py
 
 
 ## 役割  
-リーダー :k24135  丸山優梨    yuuri-mr
- 
-:k24017  伊藤源太     tanukiponta-creator
-:k24031  海老原巧翔   ebiharaaa0909 
-:K24071 佐々木 知哉    to-sasaki333 
-:K24084   鷲見叶芽    KanameSumi
+リーダー :k24135  丸山優梨    yuuri-mr  
+   
+:k24017  伊藤源太     tanukiponta-creator  
+:k24031  海老原巧翔   ebiharaaa0909  
+:K24071 佐々木 知哉    to-sasaki333   
+:K24084   鷲見叶芽    KanameSumi  

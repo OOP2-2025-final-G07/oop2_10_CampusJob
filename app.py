@@ -1,6 +1,7 @@
 from flask import Flask, render_template
-from models import initialize_database, User
+from models import initialize_database
 from models.registration import Registration
+from models import Registration, Job 
 from routes import blueprints
 
 app = Flask(__name__)
@@ -23,7 +24,13 @@ from flask import render_template
 #@app.route("/graph/<name>")
 #def graph(name):
 #    return render_template(f"graphs/{name}.html")
-
+@app.route('/multi-job-holders')
+def multi_job_holders():
+    # Registration モデルを使用してデータを取得
+    registrations = Registration.select()
+    
+    # templates/graphs/ フォルダの中にある HTML を指定
+    return render_template('graphs/Multi-job_holders.html', registrations=registrations)
 # ★ 時給分布グラフ用ルート
 @app.route("/graph/hourly_wage")
 def wage_graph():
@@ -70,6 +77,32 @@ def wage_graph():
         datasets=data
     )
 
+
+
+@app.route("/graph/occupation")
+def occupation_graph():
+    regs = Registration.select().join(Job)
+
+    counts = {
+        "飲食": 0,
+        "事務": 0,
+        "小売": 0,
+        "作業": 0,
+        "教育": 0,
+        "マスコミ": 0,
+        "エンタメ": 0,
+        "在宅": 0,
+        "その他": 0
+    }
+
+    for r in regs:
+        counts[r.job.occupation] += 1
+
+    return render_template(
+        "graphs/chart_occupation.html",
+        labels=list(counts.keys()),
+        values=list(counts.values())
+    )
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
