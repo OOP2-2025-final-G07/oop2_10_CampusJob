@@ -1,9 +1,10 @@
 from flask import Flask, render_template
-from models import initialize_database
-from models.registration import Registration 
+from models import initialize_database, User
+from models.registration import Registration
 from routes import blueprints
 
 app = Flask(__name__)
+
 
 # データベースの初期化
 initialize_database()
@@ -26,55 +27,49 @@ from flask import render_template
 # ★ 時給分布グラフ用ルート
 @app.route("/graph/hourly_wage")
 def wage_graph():
-    regs = Registration.select()
+    regs = Registration.select().join(User)
 
-    bins = {
-        "~1,100": 0,
-        "~1,150": 0,
-        "~1,200": 0,
-        "~1,250": 0,
-        "~1,300": 0,
-        "~1,350": 0,
-        "~1,400": 0,
-        "~1,450": 0,
-        "~1,500": 0,
-        "~1,550": 0,
-        "~1,600": 0,
-        "1,600~": 0,
+    bins = [
+        "~1,100", "~1,150", "~1,200", "~1,250", "~1,300",
+        "~1,350", "~1,400", "~1,450", "~1,500", "~1,550",
+        "~1,600", "1,600~"
+    ]
+
+    grades = ["1", "2", "3", "4"]
+
+    # 学年 × 時給帯 の初期化
+    data = {
+        grade: {b: 0 for b in bins}
+        for grade in grades
     }
 
+    def wage_bin(w):
+        if w <= 1100: return "~1,100"
+        elif w <= 1150: return "~1,150"
+        elif w <= 1200: return "~1,200"
+        elif w <= 1250: return "~1,250"
+        elif w <= 1300: return "~1,300"
+        elif w <= 1350: return "~1,350"
+        elif w <= 1400: return "~1,400"
+        elif w <= 1450: return "~1,450"
+        elif w <= 1500: return "~1,500"
+        elif w <= 1550: return "~1,550"
+        elif w <= 1600: return "~1,600"
+        else: return "1,600~"
+
     for r in regs:
-        w = r.hourly_wage
-        if w <= 1100:
-            bins["~1,100"] += 1
-        elif w <= 1150:
-            bins["~1,150"] += 1
-        elif w <= 1200:
-            bins["~1,200"] += 1
-        elif w <= 1250:
-            bins["~1,250"] += 1
-        elif w <= 1300:
-            bins["~1,300"] += 1
-        elif w <= 1350:
-            bins["~1,350"] += 1
-        elif w <= 1400:
-            bins["~1,400"] += 1
-        elif w <= 1450:
-            bins["~1,450"] += 1
-        elif w <= 1500:
-            bins["~1,500"] += 1
-        elif w <= 1550:
-            bins["~1,550"] += 1
-        elif w <= 1600:
-            bins["~1,600"] += 1
-        else:
-            bins["1,600~"] += 1
+        grade = r.user.grade
+        if grade not in grades:
+            continue
+        b = wage_bin(r.hourly_wage)
+        data[grade][b] += 1
 
     return render_template(
         "graphs/hourly_wage.html",
-        labels=list(bins.keys()),
-        values=list(bins.values())
+        labels=bins,
+        datasets=data
     )
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)
