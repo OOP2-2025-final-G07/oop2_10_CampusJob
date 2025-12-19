@@ -1,50 +1,73 @@
 <canvas
   id="chart"
   data-labels='{{ labels | tojson }}'
-  data-values='{{ values | tojson }}'>
+  data-datasets='{{ datasets | tojson }}'>
 </canvas>
+
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const canvas = document.getElementById('chart');
 
   const labels = JSON.parse(canvas.dataset.labels);
-  const values = JSON.parse(canvas.dataset.values);
+  const datasetsRaw = JSON.parse(canvas.dataset.datasets);
 
-  // ★ 最大値を取得
-  const maxValue = Math.max(...values);
+  // ★ 時給階級ごとの合計人数を計算
+  const totalsPerLabel = {};
+  labels.forEach(label => {
+    totalsPerLabel[label] = 0;
+    for (const grade in datasetsRaw) {
+      totalsPerLabel[label] += datasetsRaw[grade][label];
+    }
+  });
 
-  // ★ 色配列を作る（最大だけ赤）
-  const colors = values.map(v =>
-    v === maxValue ? '#ef8866' : '#6688fa'
+  // ★ 最大の時給階級を取得
+  const maxLabel = labels.reduce((a, b) =>
+    totalsPerLabel[a] > totalsPerLabel[b] ? a : b
   );
+
+  // datasets（学年ごと・通常表示）
+  const gradeColors = {
+    "1": "#9bb1ff",
+    "2": "#9be0c1",
+    "3": "#ffe29b",
+    "4": "#f5b1a4"
+  };
+
+  const datasets = Object.keys(datasetsRaw).map(grade => ({
+    label: grade + "年",
+    data: labels.map(l => datasetsRaw[grade][l]),
+    backgroundColor: gradeColors[grade],
+    borderRadius: 6
+  }));
 
   new Chart(canvas.getContext('2d'), {
     type: 'bar',
     data: {
       labels: labels,
-      datasets: [{
-        label: '人数',
-        data: values,
-        backgroundColor: colors,
-        borderRadius: 6
-      }]
+      datasets: datasets
     },
     options: {
-      plugins: {
-        legend: {
-          display: false   // ★ 凡例を非表示
-        }
-      },
       responsive: true,
       scales: {
         x: {
+          stacked: true,
+          ticks: {
+            // ★ 最大階級だけラベルを強調
+            color: (ctx) =>
+              labels[ctx.index] === maxLabel ? "#e85c3a" : "#666",
+            font: (ctx) =>
+              labels[ctx.index] === maxLabel
+                ? { weight: 'bold' }
+                : {}
+          },
           title: {
             display: true,
             text: '時給'
           }
         },
         y: {
+          stacked: true,
           beginAtZero: true,
           title: {
             display: true,
@@ -53,6 +76,11 @@
           ticks: {
             precision: 0
           }
+        }
+      },
+      plugins: {
+        legend: {
+          display: true
         }
       }
     }
