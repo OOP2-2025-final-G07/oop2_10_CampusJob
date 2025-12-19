@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from models import initialize_database
-from models.registration import Registration
+from models.registration import Registration, User 
 from models import Registration, Job 
 from routes import blueprints
 
