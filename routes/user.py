@@ -5,7 +5,7 @@ user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 @user_bp.route('/')
 def list():
-    users = User.select()
+    users = User.select().order_by(User.student_id)
     return render_template('user_list.html', title='学生一覧', items=users)
 
 @user_bp.route('/add', methods=['GET', 'POST'])
