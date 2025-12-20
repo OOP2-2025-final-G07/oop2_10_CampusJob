@@ -5,7 +5,8 @@ user_bp = Blueprint('user', __name__, url_prefix='/users')
 
 @user_bp.route('/')
 def list():
-    users = User.select()
+    # 修正点：学籍番号（student_id）で昇順ソートを追加しました
+    users = User.select().order_by(User.student_id.asc())
     return render_template('user_list.html', title='学生一覧', items=users)
 
 @user_bp.route('/add', methods=['GET', 'POST'])
