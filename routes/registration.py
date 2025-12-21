@@ -29,7 +29,7 @@ def add():
         )
         return redirect(url_for('registration.list'))
 
-    users = User.select()
+    users = User.select().order_by(User.student_id.asc())
     jobs = Job.select()
     return render_template('registration_add.html', users=users, jobs=jobs)
 
@@ -46,9 +46,14 @@ def edit(registration_id):
         registration.save()
         return redirect(url_for('registration.list'))
 
-    users = User.select()
+    users = User.select().order_by(User.student_id.asc())
     jobs = Job.select()
-    return render_template('registration_edit.html', registration=registration, users=users, jobs=jobs)
+    return render_template(
+        'registration_edit.html',
+        registration=registration,
+        users=users,
+        jobs=jobs
+    )
 
 @registration_bp.route('/delete/<int:registration_id>', methods=['POST', 'GET'])
 def delete(registration_id):
