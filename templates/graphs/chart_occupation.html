@@ -1,25 +1,38 @@
+<!--
+  円グラフを描画するための canvas 要素
+  data-labels / data-values には、Flask(Jinja2) から渡された
+  Python のリストを JSON 文字列として埋め込んでいる
+-->
 <canvas id="chart" data-labels='{{ labels | tojson }}' data-values='{{ values | tojson }}'>
 </canvas>
 
+<!-- Chart.js 本体を CDN から読み込む -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
+    // HTML上の canvas 要素を取得
     const canvas = document.getElementById('chart');
 
+    // data-labels 属性に入っている JSON 文字列を JavaScript の配列に変換
     const labels = JSON.parse(canvas.dataset.labels);
+
+    // data-values 属性に入っている JSON 文字列を JavaScript の配列に変換
     const values = JSON.parse(canvas.dataset.values);
 
+    // canvas から 2D 描画用のコンテキストを取得
     const ctx = canvas.getContext('2d');
 
+    // Chart.js を使って円グラフ（pie chart）を生成
     new Chart(ctx, {
-        type: 'pie',
+        type: 'pie', // グラフの種類（円グラフ）
         data: {
-            labels: labels,
+            labels: labels, // 職種名の一覧
             datasets: [{
-                data: values
+                data: values // 各職種の件数
             }]
         },
         options: {
-            responsive: true
+            responsive: true // 画面サイズに応じて自動調整
         }
     });
 </script>

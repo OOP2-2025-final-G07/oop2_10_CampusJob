@@ -21,6 +21,7 @@ def index():
 
 from flask import render_template
 
+
 #@app.route("/graph/<name>")
 #def graph(name):
 #    return render_template(f"graphs/{name}.html")
@@ -31,6 +32,8 @@ def multi_job_holders():
     
     # templates/graphs/ フォルダの中にある HTML を指定
     return render_template('graphs/Multi-job_holders.html', registrations=registrations)
+
+
 # ★ 時給分布グラフ用ルート
 @app.route("/graph/hourly_wage")
 def wage_graph():
@@ -78,11 +81,15 @@ def wage_graph():
     )
 
 
-
+# 職種別の登録数をグラフ表示するためのURL
 @app.route("/graph/occupation")
 def occupation_graph():
+    # Registration（登録情報）を取得し、
+    # JobテーブルとJOINして「どの職種に紐づく登録か」を取得する
     regs = Registration.select().join(Job)
 
+    # 職種ごとの件数を数えるための辞書
+    # 初期値はすべて0件
     counts = {
         "飲食": 0,
         "事務": 0,
@@ -95,9 +102,14 @@ def occupation_graph():
         "その他": 0
     }
 
+    # すべての登録データを1件ずつ確認し、
+    # 紐づいている職種（r.job.occupation）の件数を1ずつ増やす
     for r in regs:
         counts[r.job.occupation] += 1
 
+    # 集計結果をテンプレートに渡す
+    # labels : グラフのラベル（職種名）
+    # values : グラフの値（件数）
     return render_template(
         "graphs/chart_occupation.html",
         labels=list(counts.keys()),
