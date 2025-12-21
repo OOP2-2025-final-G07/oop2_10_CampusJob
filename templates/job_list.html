@@ -9,26 +9,64 @@
 
 <body>
     <h1>{{ title }}</h1>
-    <ul class="breadcrumb">
-        <li><a href="{{ url_for('index') }}">HOME</a></li>
-        <li><a href="{{ url_for('job.list') }}">アルバイト一覧</a></li>
 
+    <!-- パンくずリスト -->
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ url_for('index') }}">HOME</a>
+        </li>
+        <li>
+            <a href="{{ url_for('job.list') }}">アルバイト一覧</a>
+        </li>
     </ul>
+
     <a href="{{ url_for('job.add') }}">新しいアルバイト追加</a>
+
+    <!-- アルバイト一覧を表示するテーブル -->
     <table>
         <thead>
             <tr>
+                <!-- 編集・削除操作用の列 -->
                 <th>&nbsp;</th>
                 <th>職種</th>
                 <th>仕事内容</th>
+                <th>使用状況</th>
             </tr>
         </thead>
+
         <tbody>
+            <!-- Flaskから渡された items（Job一覧）を1件ずつ処理 -->
             {% for job in items %}
             <tr>
-                <td><a href="{{ url_for('job.edit', job_id=job.id) }}">編集</a></td>
+                <td>
+                    <!-- アルバイト情報を編集するリンク -->
+                    <a href="{{ url_for('job.edit', job_id=job.id) }}">編集</a>
+                    |
+
+                    <!-- 使用中（登録データで参照されている）場合 -->
+                    {% if job.usage_count > 0 %}
+                    <!-- 削除できないことを明示 -->
+                    <span style="color: gray;">削除不可</span>
+                    {% else %}
+                    <!-- 未使用の場合のみ削除リンクを表示 -->
+                    <!-- クリック時に確認ダイアログを表示 -->
+                    <a href="{{ url_for('job.delete', job_id=job.id) }}" onclick="return confirm('本当に削除しますか？');">
+                        削除
+                    </a>
+                    {% endif %}
+                </td>
+
                 <td>{{ job.occupation }}</td>
                 <td>{{ job.work_detail }}</td>
+                <td>
+                    {% if job.usage_count > 0 %}
+                    <!-- 登録データで使用されている件数を表示 -->
+                    使用中（{{ job.usage_count }}件）
+                    {% else %}
+                    <!-- 一度も使われていない場合 -->
+                    未使用
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
         </tbody>
